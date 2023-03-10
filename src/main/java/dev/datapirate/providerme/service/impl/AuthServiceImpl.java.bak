@@ -1,0 +1,45 @@
+package dev.datapirate.providerme.service.impl;
+
+import dev.datapirate.providerme.entity.User;
+import dev.datapirate.providerme.entity.UserLoginRequest;
+import dev.datapirate.providerme.service.api.AuthService;
+import lombok.extern.slf4j.Slf4j;
+import org.keycloak.OAuth2Constants;
+import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.KeycloakBuilder;
+import org.keycloak.representations.AccessTokenResponse;
+import org.springframework.stereotype.Service;
+
+/**
+ * Auth service implementation.
+ */
+@Slf4j
+@Service
+public class AuthServiceImpl implements AuthService {
+
+    @Override
+    public void createUser(User user) {
+
+    }
+
+    @Override
+    public AccessTokenResponse login(UserLoginRequest request) {
+        log.info("Entering login(), request: {}", request);
+
+        Keycloak keycloak = KeycloakBuilder.builder()
+                .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
+                .serverUrl("http://localhost:9000")
+                .realm("provider-me")
+                .grantType(OAuth2Constants.PASSWORD)
+                .clientId("provider-me")
+                .username(request.getUsername())
+                .password(request.getPassword())
+                .scope("openid")
+                .build();
+
+        AccessTokenResponse accessToken = keycloak.tokenManager().getAccessToken();
+
+        log.info("Leaving login(), request: {}", accessToken);
+        return accessToken;
+    }
+}

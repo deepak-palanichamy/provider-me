@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  keycloak-idm:
+    image: quay.io/keycloak/keycloak:18.0.2
+    container_name: keycloak-idm
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    ports:
+      - "9000:8080"
+    command:
+      - start-dev
+    networks:
+      - keycloak
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    container_name: mailhog-smtp
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    networks:
+      - keycloak
+
+networks:
+  keycloak:

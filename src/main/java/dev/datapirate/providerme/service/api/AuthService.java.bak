@@ -1,0 +1,10 @@
+package dev.datapirate.providerme.service.api;
+
+import dev.datapirate.providerme.entity.User;
+import dev.datapirate.providerme.entity.UserLoginRequest;
+import org.keycloak.representations.AccessTokenResponse;
+
+public interface AuthService {
+    void createUser(User user);
+    AccessTokenResponse login(UserLoginRequest request);
+}
